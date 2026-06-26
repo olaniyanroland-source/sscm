@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import {
   Menu, X, ChevronDown, ArrowRight, Phone, Mail, MapPin,
-  Users, TrendingUp, Award, Target, CheckCircle,
+  Users, Target, CheckCircle,
   BarChart2, Shield, Globe, Plus, Minus,
-  Linkedin, Instagram, Facebook, Trophy, Zap, Building2, Layers,
+  Linkedin, Instagram, Facebook, Trophy, Zap, Building2,
   Clock, Send, UserCheck, Briefcase
 } from "lucide-react";
 import siaoLogo from "../assets/sportlogo-header.jpeg";
@@ -12,7 +12,7 @@ import founderImg from "../assets/ceo2.jpeg";
 
 type Page =
   | "home" | "about" | "services" | "sports"
-  | "management" | "contact" 
+  | "contact" 
   | "faq" | "team" | "partners" | "consultation";
 
 type Lang = "en" | "pt";
@@ -43,8 +43,15 @@ async function submitToFormspree(payload: Record<string, string>) {
 const TEAM = [
   {
     name: "Adetula Olabode",
-    title: "CEO & Founder",
-    bio: "Specializing in athlete development and international sports placements, with a growing track record of connecting emerging talent to global opportunities and professional networks.",
+    title: "Managing Director",
+    bio: [
+      "Adetula Olabode Harry is the Founder and Managing Director of Sião Sports Consulting and Management, bringing extensive experience in sports development, talent identification, athlete management, and international sports relations.",
+      "With a strong passion for youth empowerment through sports, he has dedicated his career to creating opportunities for talented athletes to achieve their full potential both locally and internationally. His expertise spans sports consulting, football scouting, player development, sports administration, event management, and strategic business development within the sports industry.",
+      "As a visionary leader, Adetula Olabode Harry has established valuable partnerships with sports organizations, football clubs, academies, and stakeholders across Africa and Europe. His commitment to excellence has contributed to the successful development of numerous sports initiatives aimed at discovering, nurturing, and promoting young talents.",
+      "Under his leadership, Sião Sports Consulting and Management has grown into a trusted organization providing comprehensive services in sports management, athlete representation, career development, branding, sports events, and performance enhancement. He is particularly passionate about creating pathways for African athletes to access international opportunities while promoting professionalism, integrity, and sustainable growth within the sports ecosystem.",
+      "Through innovation, strategic thinking, and a results-driven approach, Adetula Olabode Harry continues to inspire positive change in the sports industry, helping athletes, organizations, and communities achieve their goals and unlock their full potential.",
+      "His vision remains centered on building a globally recognized platform that connects talent with opportunity, develops future champions, and contributes to the advancement of sports as a tool for social and economic development.",
+    ],
     photo: founderImg,
     expertise: ["SIAO Sport Consulting Agency","Sports Marketing","Athlete Management","International Placement"],
     location: "Portugal",
@@ -66,7 +73,7 @@ const FAQS = [
   },
   {
     q: "What industries do you specialize in?",
-    a: "Our practice areas are Sports Consulting and Management Services. We serve professional and elite sports organizations, athletes, and growth-focused teams.",
+    a: "Our practice area is Sports Consulting. We serve professional and elite sports organizations, athletes, and growth-focused teams.",
   },
   {
     q: "What distinguishes SIÃO SPORTS from larger consulting firms?",
@@ -88,9 +95,7 @@ const NAV_LINKS = [
   {
     label: "Services", page: "services" as Page,
     children: [
-      { label: "All Services", page: "services" as Page },
       { label: "Sports Consulting", page: "sports" as Page },
-      { label: "Management Services", page: "management" as Page },
     ],
   },
   { label: "Our Team", page: "team" as Page },
@@ -108,9 +113,7 @@ const PT_TRANSLATIONS: Record<string, string> = {
   Home: "Início",
   About: "Sobre",
   Services: "Serviços",
-  "All Services": "Todos os serviços",
   "Sports Consulting": "Consultoria Esportiva",
-  "Management Services": "Serviços de Gestão",
   "Our Team": "Nossa Equipe",
   Contact: "Contato",
   Partners: "Parceiros",
@@ -254,7 +257,6 @@ const PT_TRANSLATIONS: Record<string, string> = {
   "360-degree leadership assessment, executive coaching, and structured development programs for high-potential leaders.": "Avaliação de liderança 360 graus, coaching executivo e programas estruturados de desenvolvimento para líderes de alto potencial.",
   "Stakeholder engagement, communication strategy, and behavioral change programs that ensure transformation lands—not just launches.": "Engajamento de stakeholders, estratégia de comunicação e programas de mudança comportamental que garantem que a transformação aconteça, não apenas seja lançada.",
   "1:1 coaching relationships for C-suite executives navigating leadership transitions, performance plateaus, or high-stakes decisions.": "Relações de coaching individual para executivos C-level em transições de liderança, platôs de performance ou decisões de alto risco.",
-  "Discuss Your Management Challenge": "Discuta Seu Desafio de Gestão",
   "The work speaks": "O trabalho fala",
   "for": "por",
   itself: "si",
@@ -373,7 +375,19 @@ const PT_TRANSLATIONS: Record<string, string> = {
   "Switch to Portuguese": "Mudar para português",
   "Switch to English": "Mudar para inglês",
   "Where Talent": "Onde o talento",
-  "Global Opportunity": "encontra oportunidade global",
+  "Global Opportunity": "oportunidade global",
+  "One practice.": "Uma prática.",
+  Focused: "Especialização",
+  "expertise.": "focada.",
+  "Read full bio": "Ler biografia completa",
+  "Show less": "Mostrar menos",
+  "Managing Director": "Diretor Executivo",
+  "Adetula Olabode Harry is the Founder and Managing Director of Sião Sports Consulting and Management, bringing extensive experience in sports development, talent identification, athlete management, and international sports relations.": "Adetula Olabode Harry é o Fundador e Diretor Executivo da Sião Sports Consulting and Management, trazendo ampla experiência em desenvolvimento esportivo, identificação de talentos, gestão de atletas e relações esportivas internacionais.",
+  "With a strong passion for youth empowerment through sports, he has dedicated his career to creating opportunities for talented athletes to achieve their full potential both locally and internationally. His expertise spans sports consulting, football scouting, player development, sports administration, event management, and strategic business development within the sports industry.": "Com uma forte paixão pelo empoderamento da juventude por meio do esporte, ele dedicou sua carreira à criação de oportunidades para que atletas talentosos alcancem todo o seu potencial, tanto local quanto internacionalmente. Sua expertise abrange consultoria esportiva, scouting de futebol, desenvolvimento de jogadores, administração esportiva, gestão de eventos e desenvolvimento estratégico de negócios dentro da indústria esportiva.",
+  "As a visionary leader, Adetula Olabode Harry has established valuable partnerships with sports organizations, football clubs, academies, and stakeholders across Africa and Europe. His commitment to excellence has contributed to the successful development of numerous sports initiatives aimed at discovering, nurturing, and promoting young talents.": "Como líder visionário, Adetula Olabode Harry estabeleceu parcerias valiosas com organizações esportivas, clubes de futebol, academias e stakeholders em África e na Europa. Seu compromisso com a excelência contribuiu para o desenvolvimento bem-sucedido de inúmeras iniciativas esportivas voltadas à descoberta, formação e promoção de jovens talentos.",
+  "Under his leadership, Sião Sports Consulting and Management has grown into a trusted organization providing comprehensive services in sports management, athlete representation, career development, branding, sports events, and performance enhancement. He is particularly passionate about creating pathways for African athletes to access international opportunities while promoting professionalism, integrity, and sustainable growth within the sports ecosystem.": "Sob sua liderança, a Sião Sports Consulting and Management cresceu e tornou-se uma organização de confiança, oferecendo serviços completos em gestão esportiva, representação de atletas, desenvolvimento de carreira, branding, eventos esportivos e aprimoramento de desempenho. Ele é especialmente apaixonado por criar caminhos para que atletas africanos acessem oportunidades internacionais, promovendo profissionalismo, integridade e crescimento sustentável no ecossistema esportivo.",
+  "Through innovation, strategic thinking, and a results-driven approach, Adetula Olabode Harry continues to inspire positive change in the sports industry, helping athletes, organizations, and communities achieve their goals and unlock their full potential.": "Por meio da inovação, do pensamento estratégico e de uma abordagem orientada a resultados, Adetula Olabode Harry continua a inspirar mudanças positivas na indústria esportiva, ajudando atletas, organizações e comunidades a alcançar seus objetivos e desbloquear todo o seu potencial.",
+  "His vision remains centered on building a globally recognized platform that connects talent with opportunity, develops future champions, and contributes to the advancement of sports as a tool for social and economic development.": "Sua visão permanece centrada na construção de uma plataforma reconhecida globalmente que conecta talento a oportunidades, desenvolve futuros campeões e contribui para o avanço do esporte como ferramenta de desenvolvimento social e econômico.",
   "We develop, represent, and position athletes for success on the international stage — turning potential into performance and ambition into achievement.": "Desenvolvemos, representamos e posicionamos atletas para o sucesso no cenário internacional, transformando potencial em desempenho e ambição em conquistas.",
   "Years of Proven Experience": "Anos de experiência comprovada",
   "Athletes & Sports Clients Served": "Atletas e clientes esportivos atendidos",
@@ -420,7 +434,7 @@ const PT_TRANSLATIONS: Record<string, string> = {
   "How do you price your services?": "Como vocês definem o preço dos serviços?",
   "We offer project-based fixed fees, daily rate engagements, and retained advisory relationships. All commercial terms are agreed before any engagement begins—no ambiguity, no surprises.": "Oferecemos valores fixos por projeto, contratos por diária e relações contínuas de assessoria. Todas as condições comerciais são acordadas antes do início de qualquer projeto, sem ambiguidades e sem surpresas.",
   "What industries do you specialize in?": "Em quais áreas vocês são especializados?",
-  "Our practice areas are Sports Consulting and Management Services. We serve professional and elite sports organizations, athletes, and growth-focused teams.": "Nossas áreas de atuação são Consultoria Esportiva e Serviços de Gestão. Atendemos organizações esportivas profissionais e de elite, atletas e equipes focadas em crescimento.",
+  "Our practice area is Sports Consulting. We serve professional and elite sports organizations, athletes, and growth-focused teams.": "Nossa área de atuação é Consultoria Esportiva. Atendemos organizações esportivas profissionais e de elite, atletas e equipes focadas em crescimento.",
   "How large is your team?": "Qual é o tamanho da equipe?",
   "SIÃO SPORTS has 38 full-time advisors across our New York, London, and Dubai offices, plus a network of specialized independent partners we engage for specific projects.": "A SIÃO SPORTS conta com 38 consultores em tempo integral nos escritórios de Nova York, Londres e Dubai, além de uma rede de parceiros independentes especializados para projetos específicos.",
   "What distinguishes SIÃO SPORTS from larger consulting firms?": "O que diferencia a SIÃO SPORTS de consultorias maiores?",
@@ -447,7 +461,6 @@ const PT_DYNAMIC_TERMS: Record<string, string> = {
   "CEO & Founding Partner": "CEO e Sócio Fundador",
   "Managing Director, Business Strategy": "Diretora Executiva, Estratégia Empresarial",
   "Head of Sports Consulting": "Líder de Consultoria Esportiva",
-  "Director, Management Services": "Diretora, Serviços de Gestão",
   "Senior Partner, M&A Advisory": "Sócio Sênior, Assessoria em M&A",
   "Head of Analytics": "Líder de Analytics",
   "Corporate Strategy": "Estratégia Corporativa",
@@ -551,8 +564,14 @@ function translatePage(language: Lang) {
 
 const REVEAL_SELECTOR = [
   "main section",
+  "main section h1",
+  "main section h2",
+  "main section h3",
+  "main section > div > p",
+  "main section .max-w-7xl > p",
   "main section img",
   "main section form",
+  "main section button",
   "main section .grid > div",
   "main section li",
 ].join(", ");
@@ -720,7 +739,7 @@ function Nav({ current, language, navigate, onToggleLanguage }: {
                 </button>
                 {link.children && (
                   <div className="pl-5 bg-white/3">
-                    {link.children.slice(1).map((c) => (
+                    {link.children.map((c) => (
                       <button key={c.page} onClick={() => { navigate(c.page); setMobileOpen(false); }}
                         className="w-full text-left py-2.5 text-white/50 hover:text-white/80 text-sm border-b border-white/5">
                         {c.label}
@@ -788,9 +807,7 @@ function Footer({ navigate }: { navigate: (p: Page) => void }) {
               style={{ fontFamily: "'DM Mono', monospace" }}>Services</p>
             <ul className="space-y-3 text-sm">
               {[
-                ["All Services", "services"],
                 ["Sports Consulting", "sports"],
-                ["Management Services", "management"],
                 ["Request Consultation", "consultation"],
               ].map(([l, p]) => (
                 <li key={p}>
@@ -952,7 +969,7 @@ function HomePage({ navigate }: { navigate: (p: Page) => void }) {
                 icon: Users,
                 title: "Career Development & Advisory",
                 desc: "We guide athletes through every stage of their careers with personalized strategies, mentorship, and long-term planning.",
-                page: "management" as Page,
+                page: "sports" as Page,
                 img: "photo-1497366216548-37526070297c",
               },
             ].map(({ icon: Icon, title, desc, page, img }) => (
@@ -1141,8 +1158,8 @@ function ServicesPage({ navigate }: { navigate: (p: Page) => void }) {
         <div className="max-w-7xl mx-auto px-6 lg:px-10">
           <SectionLabel>What We Do</SectionLabel>
           <h1 style={serif} className="text-5xl lg:text-6xl font-bold text-white max-w-3xl leading-tight">
-            Two practices.<br />
-            <span className="italic text-[#B8872A]">Limitless</span> scope.
+            One practice.<br />
+            <span className="italic text-[#B8872A]">Focused</span> expertise.
           </h1>
         </div>
       </section>
@@ -1157,14 +1174,6 @@ function ServicesPage({ navigate }: { navigate: (p: Page) => void }) {
               img: "photo-1574629810360-7efbbe195018",
               desc: "We work with professional clubs, sports federations, elite athletes, and event organizers to build the commercial, strategic, and operational infrastructure that winning requires.",
               services: ["Sports Management & Strategic Consulting", "Talent Identification & Athlete Development", "Sports Events & Legal Advisory Services", "Branding, Media & Communication Services", "Performance Development & Athlete Welfare", "Career Management, Intermediation & Scouting"],
-            },
-            {
-              number: "02",
-              title: "Management Services",
-              page: "management" as Page,
-              img: "photo-1497366216548-37526070297c",
-              desc: "Building the human and organizational infrastructure that allows elite performance to scale—talent, structure, leadership, and execution systems.",
-              services: ["Executive Talent Management", "Organizational Design", "Project & Program Management", "Leadership Development", "Change Management", "Executive Coaching"],
             },
           ].map(({ number, title, page, img, desc, services }) => (
             <div key={title} className="grid lg:grid-cols-2 gap-16 items-center mb-24 last:mb-0 pb-24 last:pb-0 border-b border-[#0C1527]/10 last:border-0">
@@ -1269,61 +1278,6 @@ function SportsPage({ navigate }: { navigate: (p: Page) => void }) {
                 Discuss Your Sports Challenge <ArrowRight className="w-4 h-4" />
               </Btn>
             </div>
-          </div>
-        </div>
-      </section>
-    </div>
-  );
-}
-
-// ─── MANAGEMENT PAGE ───────────────────────────────────────────────────────────
-
-function ManagementPage({ navigate }: { navigate: (p: Page) => void }) {
-  return (
-    <div>
-      <section className="relative pt-36 pb-24 bg-[#0C1527] overflow-hidden">
-        <img
-          src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=1600&h=800&fit=crop&auto=format"
-          alt="Team collaboration"
-          className="absolute inset-0 w-full h-full object-cover opacity-20"
-        />
-        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10">
-          <SectionLabel>Management Services</SectionLabel>
-          <h1 style={serif} className="text-5xl lg:text-6xl font-bold text-white max-w-2xl leading-tight mb-6">
-            Organizations built<br />
-            to <span className="italic text-[#B8872A]">perform</span>.
-          </h1>
-          <p className="text-white/65 text-xl max-w-xl leading-relaxed">
-            The difference between a great strategy and a failed one is often execution. We build the people, structure, and systems that close the gap.
-          </p>
-        </div>
-      </section>
-
-      <section className="py-24 bg-[#F4EFE6]">
-        <div className="max-w-7xl mx-auto px-6 lg:px-10">
-          <div className="grid lg:grid-cols-3 gap-8 mb-16">
-            {[
-              { icon: Users, title: "Executive Talent Management", desc: "Retained search, succession planning, and long-form talent strategy for C-suite and board-level roles across industries." },
-              { icon: Layers, title: "Organizational Design", desc: "Operating model architecture, reporting line redesign, and structural transformation for organizations scaling or restructuring." },
-              { icon: Target, title: "Project & Program Management", desc: "Governance frameworks, delivery assurance, and PMO infrastructure for complex, multi-workstream transformation programs." },
-              { icon: Award, title: "Leadership Development", desc: "360-degree leadership assessment, executive coaching, and structured development programs for high-potential leaders." },
-              { icon: TrendingUp, title: "Change Management", desc: "Stakeholder engagement, communication strategy, and behavioral change programs that ensure transformation lands—not just launches." },
-              { icon: Shield, title: "Executive Coaching", desc: "1:1 coaching relationships for C-suite executives navigating leadership transitions, performance plateaus, or high-stakes decisions." },
-            ].map(({ icon: Icon, title, desc }) => (
-              <div key={title} className="bg-white p-7 border-t-2 border-transparent hover:border-[#B8872A] transition-all group shadow-sm">
-                <div className="w-11 h-11 bg-[#E8E2D8] flex items-center justify-center mb-5 group-hover:bg-[#B8872A] transition-colors">
-                  <Icon className="w-5 h-5 text-[#0C1527] group-hover:text-white transition-colors" />
-                </div>
-                <h3 style={serif} className="text-lg font-bold text-[#0C1527] mb-3">{title}</h3>
-                <p className="text-[#6B6050] text-sm leading-relaxed">{desc}</p>
-              </div>
-            ))}
-          </div>
-
-          <div className="text-center">
-            <Btn onClick={() => navigate("consultation")} variant="dark">
-              Discuss Your Management Challenge <ArrowRight className="w-4 h-4" />
-            </Btn>
           </div>
         </div>
       </section>
@@ -1617,6 +1571,8 @@ function BlogPage() {
 // ─── TEAM PAGE ─────────────────────────────────────────────────────────────────
 
 function TeamPage({ navigate }: { navigate: (p: Page) => void }) {
+  const [expandedMember, setExpandedMember] = useState<string | null>(null);
+
   return (
     <div>
       <section className="pt-36 pb-20 bg-[#0C1527]">
@@ -1636,32 +1592,52 @@ function TeamPage({ navigate }: { navigate: (p: Page) => void }) {
           </p>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {TEAM.map((member) => (
-              <div key={member.name} className="bg-white border border-[#0C1527]/8 group hover:shadow-lg transition-shadow">
-                <div className="relative h-64 overflow-hidden bg-[#E5DFD3]">
-                  <img
-                    src={getImageSrc(member.photo, "w=500&h=400&fit=crop&auto=format")}
-                    alt={member.name}
-                    className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
-                  />
-                  <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-[#0C1527]/60 to-transparent" />
-                  <div className="absolute bottom-4 left-5">
-                    <span className="text-[#B8872A] text-[10px] tracking-[0.2em] uppercase"
-                      style={{ fontFamily: "'DM Mono', monospace" }}>{member.location}</span>
+            {TEAM.map((member) => {
+              const isExpanded = expandedMember === member.name;
+              const visibleBio = isExpanded ? member.bio : member.bio.slice(0, 1);
+
+              return (
+                <div key={member.name} className="bg-white border border-[#0C1527]/8 group hover:shadow-lg transition-shadow">
+                  <div className="relative h-64 overflow-hidden bg-[#E5DFD3]">
+                    <img
+                      src={getImageSrc(member.photo, "w=500&h=400&fit=crop&auto=format")}
+                      alt={member.name}
+                      className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-[#0C1527]/60 to-transparent" />
+                    <div className="absolute bottom-4 left-5">
+                      <span className="text-[#B8872A] text-[10px] tracking-[0.2em] uppercase"
+                        style={{ fontFamily: "'DM Mono', monospace" }}>{member.location}</span>
+                    </div>
+                  </div>
+                  <div className="p-7">
+                    <h3 style={serif} className="text-xl font-bold text-[#0C1527] mb-1">{member.name}</h3>
+                    <p className="text-[#B8872A] text-sm font-medium mb-4">{member.title}</p>
+                    <div className="space-y-4 mb-5">
+                      {visibleBio.map((paragraph) => (
+                        <p key={paragraph} className="text-[#6B6050] text-sm leading-relaxed">{paragraph}</p>
+                      ))}
+                    </div>
+                    {member.bio.length > 1 && (
+                      <button
+                        type="button"
+                        aria-expanded={isExpanded}
+                        onClick={() => setExpandedMember(isExpanded ? null : member.name)}
+                        className="inline-flex items-center gap-2 text-[#0C1527] text-sm font-semibold mb-5 hover:text-[#B8872A] transition-colors"
+                      >
+                        {isExpanded ? "Show less" : "Read full bio"}
+                        <ChevronDown className={`w-4 h-4 transition-transform ${isExpanded ? "rotate-180" : ""}`} />
+                      </button>
+                    )}
+                    <div className="flex flex-wrap gap-2">
+                      {member.expertise.map((e) => (
+                        <span key={e} className="bg-[#F4EFE6] text-[#0C1527] text-xs px-3 py-1.5">{e}</span>
+                      ))}
+                    </div>
                   </div>
                 </div>
-                <div className="p-7">
-                  <h3 style={serif} className="text-xl font-bold text-[#0C1527] mb-1">{member.name}</h3>
-                  <p className="text-[#B8872A] text-sm font-medium mb-4">{member.title}</p>
-                  <p className="text-[#6B6050] text-sm leading-relaxed mb-5">{member.bio}</p>
-                  <div className="flex flex-wrap gap-2">
-                    {member.expertise.map((e) => (
-                      <span key={e} className="bg-[#F4EFE6] text-[#0C1527] text-xs px-3 py-1.5">{e}</span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
         </div>
@@ -1820,7 +1796,6 @@ function ConsultationPage() {
                       className="w-full bg-[#F4EFE6] border border-[#0C1527]/15 px-4 py-3 text-sm text-[#0C1527] focus:outline-none focus:border-[#B8872A] transition-colors">
                       <option value="">Select one…</option>
                       <option>Sports Consulting</option>
-                      <option>Management Services</option>
                       <option>Multiple Practice Areas</option>
                     </select>
                   </div>
@@ -1928,7 +1903,6 @@ export default function App() {
     about: <AboutPage navigate={navigate} />,
     services: <ServicesPage navigate={navigate} />,
     sports: <SportsPage navigate={navigate} />,
-    management: <ManagementPage navigate={navigate} />,
     contact: <ContactPage />,
     faq: <FAQPage navigate={navigate} />,
     blog: <BlogPage />,
