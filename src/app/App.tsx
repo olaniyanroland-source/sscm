@@ -8,14 +8,26 @@ import {
 } from "lucide-react";
 import siaoLogo from "../assets/sportlogo-header.jpeg";
 import ceoPhoto from "../assets/ceo.jpeg";
-import founderImg from "../assets/ceo2.jpeg";
+import aboutGraphic from "../assets/graphic.jpeg";
 
 type Page =
   | "home" | "about" | "services" | "sports"
   | "contact" 
-  | "faq" | "team" | "partners" | "consultation";
+  | "faq" | "team" | "partners" | "consultation"
+  | "privacy" | "terms" | "cookies" | "blog";
 
 type Lang = "en" | "pt";
+type LegalPageKey = "privacy" | "terms" | "cookies";
+type LegalPageContent = {
+  label: string;
+  title: string;
+  updated: string;
+  intro: string;
+  sections: Array<{
+    heading: string;
+    paragraphs: string[];
+  }>;
+};
 
 // ─── DATA ────────────────────────────────────────────────────────────────────
 
@@ -52,7 +64,7 @@ const TEAM = [
       "Through innovation, strategic thinking, and a results-driven approach, Adetula Olabode Harry continues to inspire positive change in the sports industry, helping athletes, organizations, and communities achieve their goals and unlock their full potential.",
       "His vision remains centered on building a globally recognized platform that connects talent with opportunity, develops future champions, and contributes to the advancement of sports as a tool for social and economic development.",
     ],
-    photo: founderImg,
+    photo: ceoPhoto,
     expertise: ["SIAO Sport Consulting Agency","Sports Marketing","Athlete Management","International Placement"],
     location: "Portugal",
   }  
@@ -92,15 +104,566 @@ const FAQS = [
 const NAV_LINKS = [
   { label: "Home", page: "home" as Page },
   { label: "About", page: "about" as Page },
-  {
-    label: "Services", page: "services" as Page,
-    children: [
-      { label: "Sports Consulting", page: "sports" as Page },
-    ],
-  },
+  { label: "Services", page: "services" as Page },
   { label: "Our Team", page: "team" as Page },
   { label: "Contact", page: "contact" as Page },
 ];
+
+const SITE_URL = "https://siaosports.pt";
+const DEFAULT_OG_IMAGE = `${SITE_URL}/assets/sportlogo-header-B_Xw-cZY.jpeg`;
+
+const PAGE_PATHS: Record<Page, string> = {
+  home: "/",
+  about: "/about",
+  services: "/services",
+  sports: "/sports-consulting",
+  contact: "/contact",
+  faq: "/faq",
+  team: "/team",
+  partners: "/partners",
+  consultation: "/request-consultation",
+  privacy: "/privacy-policy",
+  terms: "/terms-of-use",
+  cookies: "/cookie-policy",
+  blog: "/insights",
+};
+
+const PATH_TO_PAGE = Object.fromEntries(
+  Object.entries(PAGE_PATHS).map(([page, path]) => [path, page as Page])
+) as Record<string, Page>;
+
+const SEO_CONTENT: Record<Page, Record<Lang, { title: string; description: string; keywords: string }>> = {
+  home: {
+    en: {
+      title: "SIÃO SPORTS | Sports Consulting, Athlete Management & Scouting in Portugal",
+      description: "SIÃO SPORTS helps athletes, clubs, academies, and sports organizations with consulting, athlete management, scouting, international placement, branding, and performance development.",
+      keywords: "sports consulting Portugal, athlete management, football scouting, international player placement, sports management agency, Sião Sports",
+    },
+    pt: {
+      title: "SIÃO SPORTS | Consultoria Desportiva, Gestão de Atletas e Scouting em Portugal",
+      description: "A SIÃO SPORTS apoia atletas, clubes, academias e organizações desportivas com consultoria, gestão de carreira, scouting, colocação internacional, branding e desenvolvimento de performance.",
+      keywords: "consultoria desportiva Portugal, gestão de atletas, scouting futebol, colocação internacional de jogadores, agência de gestão desportiva, Sião Sports",
+    },
+  },
+  about: {
+    en: {
+      title: "About SIÃO SPORTS | Sports Consulting and Management Agency",
+      description: "Learn about Sião Sports Consulting and Management, a Portugal-based agency creating opportunities for athletes, clubs, academies, and sports organizations.",
+      keywords: "about Sião Sports, sports consultancy Portugal, sports management agency, athlete development Portugal",
+    },
+    pt: {
+      title: "Sobre a SIÃO SPORTS | Agência de Consultoria e Gestão Desportiva",
+      description: "Conheça a Sião Sports Consulting and Management, uma agência sediada em Portugal que cria oportunidades para atletas, clubes, academias e organizações desportivas.",
+      keywords: "sobre Sião Sports, consultoria desportiva Portugal, agência de gestão desportiva, desenvolvimento de atletas Portugal",
+    },
+  },
+  services: {
+    en: {
+      title: "Sports Consulting Services | SIÃO SPORTS",
+      description: "Explore sports consulting, athlete representation, scouting, legal advisory, event management, branding, media, and performance development services.",
+      keywords: "sports consulting services, athlete representation, sports legal advisory, sports event management, sports branding",
+    },
+    pt: {
+      title: "Serviços de Consultoria Desportiva | SIÃO SPORTS",
+      description: "Explore serviços de consultoria desportiva, representação de atletas, scouting, assessoria jurídica, gestão de eventos, branding, mídia e desenvolvimento de performance.",
+      keywords: "serviços de consultoria desportiva, representação de atletas, assessoria jurídica desportiva, gestão de eventos desportivos, branding desportivo",
+    },
+  },
+  sports: {
+    en: {
+      title: "Sports Consulting Practice | Athlete Management, Scouting & Club Advisory",
+      description: "Senior-led sports consulting for athlete development, talent identification, intermediation, club advisory, sports events, and performance systems.",
+      keywords: "sports consulting practice, athlete management, football scouting, club advisory, talent identification",
+    },
+    pt: {
+      title: "Consultoria Desportiva | Gestão de Atletas, Scouting e Assessoria a Clubes",
+      description: "Consultoria desportiva liderada por profissionais seniores para desenvolvimento de atletas, identificação de talentos, intermediação, assessoria a clubes, eventos e performance.",
+      keywords: "consultoria desportiva, gestão de atletas, scouting futebol, assessoria a clubes, identificação de talentos",
+    },
+  },
+  contact: {
+    en: {
+      title: "Contact SIÃO SPORTS | Sports Consulting in Faro, Portugal",
+      description: "Contact SIÃO SPORTS in Faro, Portugal for athlete management, sports consulting, scouting, international placement, branding, and advisory enquiries.",
+      keywords: "contact SIÃO SPORTS, sports consulting Faro, athlete management Portugal contact",
+    },
+    pt: {
+      title: "Contacte a SIÃO SPORTS | Consultoria Desportiva em Faro, Portugal",
+      description: "Contacte a SIÃO SPORTS em Faro, Portugal para gestão de atletas, consultoria desportiva, scouting, colocação internacional, branding e assessoria.",
+      keywords: "contactar SIÃO SPORTS, consultoria desportiva Faro, gestão de atletas Portugal contacto",
+    },
+  },
+  faq: {
+    en: {
+      title: "Sports Consulting FAQ | SIÃO SPORTS",
+      description: "Find answers about how SIÃO SPORTS engagements begin, typical timelines, pricing models, advisory relationships, and sports consulting services.",
+      keywords: "sports consulting FAQ, athlete management questions, consulting engagement Portugal",
+    },
+    pt: {
+      title: "FAQ de Consultoria Desportiva | SIÃO SPORTS",
+      description: "Encontre respostas sobre como começam os projetos da SIÃO SPORTS, prazos, modelos de preço, assessoria contínua e serviços de consultoria desportiva.",
+      keywords: "FAQ consultoria desportiva, perguntas gestão de atletas, projeto de consultoria Portugal",
+    },
+  },
+  team: {
+    en: {
+      title: "Our Team | SIÃO SPORTS Leadership",
+      description: "Meet the leadership behind SIÃO SPORTS and its work in sports consulting, athlete management, scouting, and international sports relations.",
+      keywords: "SIÃO SPORTS team, Adetula Olabode, sports consulting leadership, athlete management Portugal",
+    },
+    pt: {
+      title: "Nossa Equipe | Liderança da SIÃO SPORTS",
+      description: "Conheça a liderança da SIÃO SPORTS e o seu trabalho em consultoria desportiva, gestão de atletas, scouting e relações desportivas internacionais.",
+      keywords: "equipe SIÃO SPORTS, Adetula Olabode, liderança consultoria desportiva, gestão de atletas Portugal",
+    },
+  },
+  partners: {
+    en: {
+      title: "Partners and Clients | SIÃO SPORTS",
+      description: "SIÃO SPORTS works with professional clubs, sports academies, player representatives, and community sport programs.",
+      keywords: "sports partners, football academies, professional clubs, player representatives",
+    },
+    pt: {
+      title: "Parceiros e Clientes | SIÃO SPORTS",
+      description: "A SIÃO SPORTS trabalha com clubes profissionais, academias desportivas, representantes de jogadores e programas comunitários de desporto.",
+      keywords: "parceiros desportivos, academias de futebol, clubes profissionais, representantes de jogadores",
+    },
+  },
+  consultation: {
+    en: {
+      title: "Request a Sports Consulting Consultation | SIÃO SPORTS",
+      description: "Request a consultation with SIÃO SPORTS for athlete management, scouting, sports advisory, branding, events, or international placement support.",
+      keywords: "request sports consultation, athlete management consultation, scouting consultation Portugal",
+    },
+    pt: {
+      title: "Solicitar Consulta de Consultoria Desportiva | SIÃO SPORTS",
+      description: "Solicite uma consulta com a SIÃO SPORTS para gestão de atletas, scouting, assessoria desportiva, branding, eventos ou apoio à colocação internacional.",
+      keywords: "solicitar consultoria desportiva, consulta gestão de atletas, consulta scouting Portugal",
+    },
+  },
+  privacy: {
+    en: {
+      title: "Privacy Policy | SIÃO SPORTS",
+      description: "Read how SIÃO SPORTS collects, uses, shares, and protects personal information when you use the website or contact the agency.",
+      keywords: "SIÃO SPORTS privacy policy, data protection, privacy Portugal",
+    },
+    pt: {
+      title: "Política de Privacidade | SIÃO SPORTS",
+      description: "Leia como a SIÃO SPORTS recolhe, utiliza, partilha e protege dados pessoais quando utiliza o website ou contacta a agência.",
+      keywords: "política de privacidade SIÃO SPORTS, proteção de dados, privacidade Portugal",
+    },
+  },
+  terms: {
+    en: {
+      title: "Terms of Use | SIÃO SPORTS",
+      description: "Read the terms governing access to and use of the SIÃO SPORTS website.",
+      keywords: "SIÃO SPORTS terms of use, website terms, legal terms",
+    },
+    pt: {
+      title: "Termos de Uso | SIÃO SPORTS",
+      description: "Leia os termos que regulam o acesso e a utilização do website da SIÃO SPORTS.",
+      keywords: "termos de uso SIÃO SPORTS, termos do website, termos legais",
+    },
+  },
+  cookies: {
+    en: {
+      title: "Cookie Policy | SIÃO SPORTS",
+      description: "Learn how SIÃO SPORTS may use cookies and similar technologies on the website.",
+      keywords: "SIÃO SPORTS cookie policy, cookies, website privacy",
+    },
+    pt: {
+      title: "Política de Cookies | SIÃO SPORTS",
+      description: "Saiba como a SIÃO SPORTS pode utilizar cookies e tecnologias semelhantes no website.",
+      keywords: "política de cookies SIÃO SPORTS, cookies, privacidade website",
+    },
+  },
+  blog: {
+    en: {
+      title: "Sports Consulting Insights | SIÃO SPORTS",
+      description: "Insights and analysis from SIÃO SPORTS on athlete development, sports management, scouting, and performance strategy.",
+      keywords: "sports consulting insights, athlete development articles, sports management strategy",
+    },
+    pt: {
+      title: "Insights de Consultoria Desportiva | SIÃO SPORTS",
+      description: "Insights e análises da SIÃO SPORTS sobre desenvolvimento de atletas, gestão desportiva, scouting e estratégia de performance.",
+      keywords: "insights consultoria desportiva, artigos desenvolvimento de atletas, estratégia de gestão desportiva",
+    },
+  },
+};
+
+const LEGAL_PAGES: Record<LegalPageKey, LegalPageContent> = {
+  privacy: {
+    label: "Privacy Policy",
+    title: "Privacy Policy",
+    updated: "Last updated: June 27, 2026",
+    intro:
+      "This Privacy Policy explains how Sião Sports Consulting and Management collects, uses, shares, and protects personal information when you visit our website, contact us, request a consultation, or engage our services.",
+    sections: [
+      {
+        heading: "Who we are",
+        paragraphs: [
+          "Sião Sports Consulting and Management is a sports consulting and management agency based in Portugal. For privacy questions, you can contact us at siaosportscm@gmail.com or by post at Estrada Vale de Eguas, 78, Bloco A Rc Dto, 8135-033 Almancil, Loule, Faro, Portugal.",
+        ],
+      },
+      {
+        heading: "Information we collect",
+        paragraphs: [
+          "We collect information you choose to provide, such as your name, email address, phone number, organization, service area, timeline, and the details you include in contact or consultation forms.",
+          "We may also collect basic technical information when you use the website, including device type, browser type, approximate location, pages viewed, referral source, and cookie or similar identifier data.",
+        ],
+      },
+      {
+        heading: "How we use information",
+        paragraphs: [
+          "We use personal information to respond to enquiries, assess consultation requests, provide services, manage client relationships, improve the website, protect our business, comply with legal obligations, and keep appropriate business records.",
+          "We do not sell personal information. We only use it for legitimate business purposes connected to our consulting, athlete management, scouting, event, branding, and advisory services.",
+        ],
+      },
+      {
+        heading: "Legal bases",
+        paragraphs: [
+          "Where applicable data protection law applies, we rely on consent, contract performance, legitimate interests, and legal obligations as the legal bases for processing personal information.",
+        ],
+      },
+      {
+        heading: "Service providers and transfers",
+        paragraphs: [
+          "We may share information with trusted providers who help us operate the website, process form submissions, manage communications, host data, or support professional services. These providers must handle information only for the services they provide to us.",
+          "Some providers may process information outside Portugal or the European Economic Area. Where required, we use appropriate safeguards for international transfers.",
+        ],
+      },
+      {
+        heading: "Retention",
+        paragraphs: [
+          "We keep personal information only for as long as needed for the purpose collected, including responding to your request, managing an engagement, meeting legal or accounting requirements, resolving disputes, and maintaining business records.",
+        ],
+      },
+      {
+        heading: "Your rights",
+        paragraphs: [
+          "Depending on your location, you may have rights to access, correct, delete, restrict, object to, or receive a copy of your personal information. You may also withdraw consent where processing is based on consent.",
+          "To exercise a privacy right, contact us at siaosportscm@gmail.com. We may need to verify your identity before acting on a request.",
+        ],
+      },
+      {
+        heading: "Security",
+        paragraphs: [
+          "We use reasonable administrative, technical, and organizational measures to protect personal information. No website or internet transmission is completely secure, so we cannot guarantee absolute security.",
+        ],
+      },
+      {
+        heading: "Changes to this policy",
+        paragraphs: [
+          "We may update this Privacy Policy from time to time. The updated version will be posted on this website with a revised date.",
+        ],
+      },
+    ],
+  },
+  terms: {
+    label: "Terms of Use",
+    title: "Terms of Use",
+    updated: "Last updated: June 27, 2026",
+    intro:
+      "These Terms of Use govern your access to and use of the Sião Sports Consulting and Management website. By using this website, you agree to these terms.",
+    sections: [
+      {
+        heading: "Website purpose",
+        paragraphs: [
+          "This website provides general information about our sports consulting, athlete management, scouting, intermediation, event, branding, and advisory services. The content is provided for informational purposes only and does not create a client, agency, representation, partnership, or employment relationship.",
+        ],
+      },
+      {
+        heading: "Use of the website",
+        paragraphs: [
+          "You agree to use the website lawfully and respectfully. You must not interfere with website operation, attempt unauthorized access, submit malicious code, scrape content at scale, impersonate another person, or use the website to send unlawful, misleading, or harmful material.",
+        ],
+      },
+      {
+        heading: "Consultation requests",
+        paragraphs: [
+          "Submitting a contact form or consultation request does not guarantee acceptance, representation, placement, club signing, investment outcome, commercial result, or any specific opportunity. Any engagement is subject to separate written terms agreed by both parties.",
+        ],
+      },
+      {
+        heading: "Intellectual property",
+        paragraphs: [
+          "The website content, branding, layout, text, images, graphics, and other materials are owned by or licensed to Sião Sports Consulting and Management unless otherwise stated. You may view the website for personal or internal business purposes, but you may not copy, reproduce, modify, distribute, or commercially exploit content without permission.",
+        ],
+      },
+      {
+        heading: "Third-party links",
+        paragraphs: [
+          "The website may include links to third-party websites or social media pages. We are not responsible for third-party content, availability, security, or privacy practices.",
+        ],
+      },
+      {
+        heading: "No warranties",
+        paragraphs: [
+          "The website is provided on an as-is and as-available basis. We aim to keep information accurate and current, but we do not warrant that the website will be uninterrupted, error-free, secure, or free of harmful components.",
+        ],
+      },
+      {
+        heading: "Limitation of liability",
+        paragraphs: [
+          "To the fullest extent permitted by law, Sião Sports Consulting and Management will not be liable for indirect, incidental, consequential, special, punitive, or loss-of-profit damages arising from your use of the website.",
+        ],
+      },
+      {
+        heading: "Governing law",
+        paragraphs: [
+          "These terms are governed by the laws of Portugal, without prejudice to any mandatory consumer or data protection rights that may apply in your location.",
+        ],
+      },
+      {
+        heading: "Contact",
+        paragraphs: [
+          "Questions about these Terms of Use can be sent to siaosportscm@gmail.com.",
+        ],
+      },
+    ],
+  },
+  cookies: {
+    label: "Cookie Policy",
+    title: "Cookie Policy",
+    updated: "Last updated: June 27, 2026",
+    intro:
+      "This Cookie Policy explains how Sião Sports Consulting and Management may use cookies and similar technologies on this website.",
+    sections: [
+      {
+        heading: "What cookies are",
+        paragraphs: [
+          "Cookies are small text files placed on your device when you visit a website. Similar technologies, such as local storage or pixels, may also store or access information on your device.",
+        ],
+      },
+      {
+        heading: "Types of cookies we may use",
+        paragraphs: [
+          "Strictly necessary cookies support core website functions such as security, page navigation, form handling, and language preferences.",
+          "Analytics cookies help us understand how visitors use the website, which pages are viewed, and how the website can be improved.",
+          "Third-party cookies may be set by embedded tools, form providers, hosting services, analytics services, maps, videos, or social media links where those features are used.",
+        ],
+      },
+      {
+        heading: "How we use cookies",
+        paragraphs: [
+          "We use cookies and similar technologies to operate the website, remember basic preferences, improve performance, measure engagement, protect the website, and understand which content is useful to visitors.",
+        ],
+      },
+      {
+        heading: "Managing cookies",
+        paragraphs: [
+          "You can control cookies through your browser settings. Most browsers allow you to block, delete, or limit cookies. If you block certain cookies, some website features may not work correctly.",
+          "Where a consent tool is available on the website, you can use it to manage non-essential cookie preferences.",
+        ],
+      },
+      {
+        heading: "Third-party responsibility",
+        paragraphs: [
+          "Third-party services may use their own cookies or similar technologies. Their use is governed by their own privacy and cookie notices, not this policy.",
+        ],
+      },
+      {
+        heading: "Updates",
+        paragraphs: [
+          "We may update this Cookie Policy as our website and services change. The latest version will be posted on this page.",
+        ],
+      },
+      {
+        heading: "Contact",
+        paragraphs: [
+          "For questions about cookies or privacy, contact us at siaosportscm@gmail.com.",
+        ],
+      },
+    ],
+  },
+};
+
+const LEGAL_PAGES_PT: Record<LegalPageKey, LegalPageContent> = {
+  privacy: {
+    label: "Política de Privacidade",
+    title: "Política de Privacidade",
+    updated: "Última atualização: 27 de junho de 2026",
+    intro:
+      "Esta Política de Privacidade explica como a Sião Sports Consulting and Management recolhe, utiliza, partilha e protege dados pessoais quando visita o nosso website, entra em contacto connosco, solicita uma consulta ou contrata os nossos serviços.",
+    sections: [
+      {
+        heading: "Quem somos",
+        paragraphs: [
+          "A Sião Sports Consulting and Management é uma agência de consultoria e gestão desportiva sediada em Portugal. Para questões de privacidade, pode contactar-nos através de siaosportscm@gmail.com ou por correio para Estrada Vale de Eguas, 78, Bloco A Rc Dto, 8135-033 Almancil, Loule, Faro, Portugal.",
+        ],
+      },
+      {
+        heading: "Informações que recolhemos",
+        paragraphs: [
+          "Recolhemos as informações que decide fornecer, como nome, endereço de email, número de telefone, organização, área de serviço, prazo previsto e os detalhes incluídos nos formulários de contacto ou pedido de consulta.",
+          "Também podemos recolher informações técnicas básicas quando utiliza o website, incluindo tipo de dispositivo, tipo de navegador, localização aproximada, páginas visualizadas, origem da visita e dados de cookies ou identificadores semelhantes.",
+        ],
+      },
+      {
+        heading: "Como utilizamos as informações",
+        paragraphs: [
+          "Utilizamos dados pessoais para responder a pedidos, avaliar solicitações de consulta, prestar serviços, gerir relações com clientes, melhorar o website, proteger o nosso negócio, cumprir obrigações legais e manter registos comerciais adequados.",
+          "Não vendemos dados pessoais. Utilizamos essas informações apenas para fins comerciais legítimos relacionados com os nossos serviços de consultoria, gestão de atletas, scouting, eventos, branding e assessoria.",
+        ],
+      },
+      {
+        heading: "Bases legais",
+        paragraphs: [
+          "Quando a legislação de proteção de dados aplicável assim o exigir, tratamos dados pessoais com base no consentimento, execução de contrato, interesses legítimos e cumprimento de obrigações legais.",
+        ],
+      },
+      {
+        heading: "Prestadores de serviços e transferências",
+        paragraphs: [
+          "Podemos partilhar informações com prestadores de serviços de confiança que nos ajudam a operar o website, processar formulários, gerir comunicações, alojar dados ou apoiar serviços profissionais. Esses prestadores devem tratar as informações apenas para os serviços que nos prestam.",
+          "Alguns prestadores podem tratar informações fora de Portugal ou do Espaço Económico Europeu. Quando exigido, utilizamos salvaguardas adequadas para transferências internacionais.",
+        ],
+      },
+      {
+        heading: "Conservação",
+        paragraphs: [
+          "Mantemos dados pessoais apenas durante o tempo necessário para a finalidade para a qual foram recolhidos, incluindo responder ao seu pedido, gerir uma contratação, cumprir requisitos legais ou contabilísticos, resolver litígios e manter registos comerciais.",
+        ],
+      },
+      {
+        heading: "Os seus direitos",
+        paragraphs: [
+          "Dependendo da sua localização, poderá ter direitos de acesso, retificação, eliminação, limitação, oposição ou portabilidade dos seus dados pessoais. Também poderá retirar o consentimento quando o tratamento se basear no consentimento.",
+          "Para exercer um direito de privacidade, contacte-nos através de siaosportscm@gmail.com. Poderemos ter de verificar a sua identidade antes de responder ao pedido.",
+        ],
+      },
+      {
+        heading: "Segurança",
+        paragraphs: [
+          "Utilizamos medidas administrativas, técnicas e organizacionais razoáveis para proteger dados pessoais. Nenhum website ou transmissão pela internet é totalmente seguro, pelo que não podemos garantir segurança absoluta.",
+        ],
+      },
+      {
+        heading: "Alterações a esta política",
+        paragraphs: [
+          "Podemos atualizar esta Política de Privacidade periodicamente. A versão atualizada será publicada neste website com uma nova data de revisão.",
+        ],
+      },
+    ],
+  },
+  terms: {
+    label: "Termos de Uso",
+    title: "Termos de Uso",
+    updated: "Última atualização: 27 de junho de 2026",
+    intro:
+      "Estes Termos de Uso regulam o seu acesso e utilização do website da Sião Sports Consulting and Management. Ao utilizar este website, concorda com estes termos.",
+    sections: [
+      {
+        heading: "Finalidade do website",
+        paragraphs: [
+          "Este website fornece informações gerais sobre os nossos serviços de consultoria desportiva, gestão de atletas, scouting, intermediação, eventos, branding e assessoria. O conteúdo é disponibilizado apenas para fins informativos e não cria uma relação de cliente, agência, representação, parceria ou emprego.",
+        ],
+      },
+      {
+        heading: "Utilização do website",
+        paragraphs: [
+          "Concorda em utilizar o website de forma legal e respeitosa. Não deve interferir com o funcionamento do website, tentar acesso não autorizado, enviar código malicioso, recolher conteúdo em escala, fazer-se passar por outra pessoa ou utilizar o website para enviar material ilegal, enganoso ou prejudicial.",
+        ],
+      },
+      {
+        heading: "Pedidos de consulta",
+        paragraphs: [
+          "O envio de um formulário de contacto ou pedido de consulta não garante aceitação, representação, colocação, assinatura com clube, resultado de investimento, resultado comercial ou qualquer oportunidade específica. Qualquer contratação estará sujeita a termos escritos separados acordados por ambas as partes.",
+        ],
+      },
+      {
+        heading: "Propriedade intelectual",
+        paragraphs: [
+          "O conteúdo, marca, layout, textos, imagens, gráficos e outros materiais do website pertencem ou são licenciados à Sião Sports Consulting and Management, salvo indicação em contrário. Pode visualizar o website para fins pessoais ou internos de negócio, mas não pode copiar, reproduzir, modificar, distribuir ou explorar comercialmente o conteúdo sem autorização.",
+        ],
+      },
+      {
+        heading: "Links de terceiros",
+        paragraphs: [
+          "O website pode incluir links para websites de terceiros ou páginas de redes sociais. Não somos responsáveis pelo conteúdo, disponibilidade, segurança ou práticas de privacidade de terceiros.",
+        ],
+      },
+      {
+        heading: "Sem garantias",
+        paragraphs: [
+          "O website é fornecido tal como está e conforme disponível. Procuramos manter as informações corretas e atuais, mas não garantimos que o website seja ininterrupto, livre de erros, seguro ou livre de componentes prejudiciais.",
+        ],
+      },
+      {
+        heading: "Limitação de responsabilidade",
+        paragraphs: [
+          "Na medida máxima permitida por lei, a Sião Sports Consulting and Management não será responsável por danos indiretos, incidentais, consequenciais, especiais, punitivos ou por perda de lucros decorrentes da utilização do website.",
+        ],
+      },
+      {
+        heading: "Lei aplicável",
+        paragraphs: [
+          "Estes termos são regidos pelas leis de Portugal, sem prejuízo de quaisquer direitos obrigatórios de consumidor ou proteção de dados que possam aplicar-se na sua localização.",
+        ],
+      },
+      {
+        heading: "Contacto",
+        paragraphs: [
+          "Questões sobre estes Termos de Uso podem ser enviadas para siaosportscm@gmail.com.",
+        ],
+      },
+    ],
+  },
+  cookies: {
+    label: "Política de Cookies",
+    title: "Política de Cookies",
+    updated: "Última atualização: 27 de junho de 2026",
+    intro:
+      "Esta Política de Cookies explica como a Sião Sports Consulting and Management pode utilizar cookies e tecnologias semelhantes neste website.",
+    sections: [
+      {
+        heading: "O que são cookies",
+        paragraphs: [
+          "Cookies são pequenos ficheiros de texto colocados no seu dispositivo quando visita um website. Tecnologias semelhantes, como armazenamento local ou pixels, também podem guardar ou aceder a informações no seu dispositivo.",
+        ],
+      },
+      {
+        heading: "Tipos de cookies que podemos utilizar",
+        paragraphs: [
+          "Cookies estritamente necessários apoiam funções essenciais do website, como segurança, navegação, processamento de formulários e preferências de idioma.",
+          "Cookies de análise ajudam-nos a compreender como os visitantes utilizam o website, que páginas são visualizadas e como o website pode ser melhorado.",
+          "Cookies de terceiros podem ser definidos por ferramentas incorporadas, fornecedores de formulários, serviços de alojamento, serviços de análise, mapas, vídeos ou links de redes sociais quando essas funcionalidades são utilizadas.",
+        ],
+      },
+      {
+        heading: "Como utilizamos cookies",
+        paragraphs: [
+          "Utilizamos cookies e tecnologias semelhantes para operar o website, recordar preferências básicas, melhorar o desempenho, medir interação, proteger o website e compreender que conteúdo é útil para os visitantes.",
+        ],
+      },
+      {
+        heading: "Gerir cookies",
+        paragraphs: [
+          "Pode controlar cookies através das definições do seu navegador. A maioria dos navegadores permite bloquear, eliminar ou limitar cookies. Se bloquear determinados cookies, algumas funcionalidades do website podem não funcionar corretamente.",
+          "Quando uma ferramenta de consentimento estiver disponível no website, pode utilizá-la para gerir preferências de cookies não essenciais.",
+        ],
+      },
+      {
+        heading: "Responsabilidade de terceiros",
+        paragraphs: [
+          "Serviços de terceiros podem utilizar os seus próprios cookies ou tecnologias semelhantes. Essa utilização é regida pelos seus próprios avisos de privacidade e cookies, não por esta política.",
+        ],
+      },
+      {
+        heading: "Atualizações",
+        paragraphs: [
+          "Podemos atualizar esta Política de Cookies à medida que o nosso website e os nossos serviços mudam. A versão mais recente será publicada nesta página.",
+        ],
+      },
+      {
+        heading: "Contacto",
+        paragraphs: [
+          "Para questões sobre cookies ou privacidade, contacte-nos através de siaosportscm@gmail.com.",
+        ],
+      },
+    ],
+  },
+};
 
 const PARTNERS = [
   "Professional Clubs",
@@ -607,6 +1170,134 @@ function useSiteAnimations(page: Page) {
   }, [page]);
 }
 
+function normalizePath(pathname: string) {
+  const path = pathname.replace(/\/+$/, "") || "/";
+  return path === "/sscm" ? "/" : path.replace(/^\/sscm(?=\/)/, "");
+}
+
+function getPageFromLocation() {
+  if (typeof window === "undefined") return "home" as Page;
+  return PATH_TO_PAGE[normalizePath(window.location.pathname)] || "home";
+}
+
+function setMeta(attribute: "name" | "property", key: string, content: string) {
+  let element = document.head.querySelector<HTMLMetaElement>(`meta[${attribute}="${key}"]`);
+  if (!element) {
+    element = document.createElement("meta");
+    element.setAttribute(attribute, key);
+    document.head.appendChild(element);
+  }
+  element.setAttribute("content", content);
+}
+
+function setLink(rel: string, href: string, hreflang?: string) {
+  const selector = hreflang ? `link[rel="${rel}"][hreflang="${hreflang}"]` : `link[rel="${rel}"]:not([hreflang])`;
+  let element = document.head.querySelector<HTMLLinkElement>(selector);
+  if (!element) {
+    element = document.createElement("link");
+    element.setAttribute("rel", rel);
+    if (hreflang) element.setAttribute("hreflang", hreflang);
+    document.head.appendChild(element);
+  }
+  element.setAttribute("href", href);
+}
+
+function setJsonLd(page: Page, language: Lang, canonicalUrl: string) {
+  const seo = SEO_CONTENT[page][language];
+  let script = document.getElementById("site-json-ld") as HTMLScriptElement | null;
+  if (!script) {
+    script = document.createElement("script");
+    script.id = "site-json-ld";
+    script.type = "application/ld+json";
+    document.head.appendChild(script);
+  }
+
+  const organization = {
+    "@type": "ProfessionalService",
+    "@id": `${SITE_URL}/#organization`,
+    name: "SIÃO SPORTS",
+    legalName: "Sião Sports Consulting and Management",
+    url: SITE_URL,
+    logo: DEFAULT_OG_IMAGE,
+    image: DEFAULT_OG_IMAGE,
+    email: "siaosportscm@gmail.com",
+    telephone: "+351 916 507 934",
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: "Estrada Vale de Eguas, 78, Bloco A Rc Dto",
+      postalCode: "8135-033",
+      addressLocality: "Almancil",
+      addressRegion: "Faro",
+      addressCountry: "PT",
+    },
+    areaServed: ["Portugal", "Europe", "Africa"],
+    serviceType: [
+      "Sports consulting",
+      "Athlete management",
+      "Talent scouting",
+      "International player placement",
+      "Sports branding",
+      "Sports event management",
+    ],
+    sameAs: [
+      "https://www.linkedin.com/company/si%C3%A3o-sports-consulting-and-management/",
+      "https://x.com/siaosportscm?s=20",
+      "https://www.instagram.com/siaosportscm",
+      "https://web.facebook.com/profile.php?id=61583142392836",
+    ],
+  };
+
+  const webPage = {
+    "@type": "WebPage",
+    "@id": `${canonicalUrl}#webpage`,
+    url: canonicalUrl,
+    name: seo.title,
+    description: seo.description,
+    inLanguage: language === "pt" ? "pt-PT" : "en",
+    isPartOf: {
+      "@type": "WebSite",
+      "@id": `${SITE_URL}/#website`,
+      name: "SIÃO SPORTS",
+      url: SITE_URL,
+      publisher: { "@id": `${SITE_URL}/#organization` },
+    },
+  };
+
+  script.textContent = JSON.stringify({
+    "@context": "https://schema.org",
+    "@graph": [organization, webPage],
+  });
+}
+
+function updateSeo(page: Page, language: Lang) {
+  const seo = SEO_CONTENT[page][language];
+  const canonicalUrl = `${SITE_URL}${PAGE_PATHS[page] === "/" ? "/" : PAGE_PATHS[page]}`;
+  const locale = language === "pt" ? "pt_PT" : "en_US";
+
+  document.title = seo.title;
+  document.documentElement.lang = language === "pt" ? "pt-PT" : "en";
+  setMeta("name", "description", seo.description);
+  setMeta("name", "keywords", seo.keywords);
+  setMeta("name", "robots", "index, follow, max-image-preview:large");
+  setMeta("name", "author", "SIÃO SPORTS");
+  setMeta("name", "application-name", "SIÃO SPORTS");
+  setMeta("property", "og:type", "website");
+  setMeta("property", "og:site_name", "SIÃO SPORTS");
+  setMeta("property", "og:title", seo.title);
+  setMeta("property", "og:description", seo.description);
+  setMeta("property", "og:url", canonicalUrl);
+  setMeta("property", "og:image", DEFAULT_OG_IMAGE);
+  setMeta("property", "og:locale", locale);
+  setMeta("name", "twitter:card", "summary_large_image");
+  setMeta("name", "twitter:title", seo.title);
+  setMeta("name", "twitter:description", seo.description);
+  setMeta("name", "twitter:image", DEFAULT_OG_IMAGE);
+  setLink("canonical", canonicalUrl);
+  setLink("alternate", canonicalUrl, language === "pt" ? "pt-PT" : "en");
+  setLink("alternate", canonicalUrl, "x-default");
+  setJsonLd(page, language, canonicalUrl);
+}
+
 // ─── SHARED COMPONENTS ────────────────────────────────────────────────────────
 
 const serif = { fontFamily: "'Playfair Display', Georgia, serif" };
@@ -681,29 +1372,12 @@ function Nav({ current, language, navigate, onToggleLanguage }: {
 
         {/* Desktop links */}
         <div className="hidden lg:flex items-center gap-5 xl:gap-7">
-          {NAV_LINKS.map((link) =>
-            link.children ? (
-              <div key={link.label} className="relative group">
-                <button className="flex items-center gap-1 text-white/75 hover:text-white text-sm font-medium transition-colors group-hover:text-white">
-                  {link.label} <ChevronDown className="w-3 h-3 transition-transform group-hover:rotate-180" />
-                </button>
-                <div className="hidden group-hover:block absolute top-full left-0 mt-2 bg-white shadow-2xl border border-[#0C1527]/8 min-w-[220px] py-1.5">
-                  {link.children.map((child) => (
-                    <button key={child.page}
-                      onClick={() => navigate(child.page)}
-                      className={`w-full text-left px-5 py-3 text-sm transition-colors hover:bg-[#F4EFE6] ${current === child.page ? "text-[#B8872A] font-medium" : "text-[#0C1527]"}`}>
-                      {child.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            ) : (
-              <button key={link.page} onClick={() => navigate(link.page)}
-                className={`text-sm font-medium transition-colors ${current === link.page ? "text-[#B8872A]" : "text-white/75 hover:text-white"}`}>
-                {link.label}
-              </button>
-            )
-          )}
+          {NAV_LINKS.map((link) => (
+            <button key={link.page} onClick={() => navigate(link.page)}
+              className={`text-sm font-medium transition-colors ${current === link.page ? "text-[#B8872A]" : "text-white/75 hover:text-white"}`}>
+              {link.label}
+            </button>
+          ))}
         </div>
 
         <div className="hidden lg:flex items-center gap-2 xl:gap-3">
@@ -732,22 +1406,10 @@ function Nav({ current, language, navigate, onToggleLanguage }: {
         <div className="lg:hidden bg-[#0C1527] border-t border-white/10 pb-6 px-6">
           <div className="pt-4 flex flex-col gap-0">
             {NAV_LINKS.map((link) => (
-              <div key={link.label}>
-                <button onClick={() => { navigate(link.page); setMobileOpen(false); }}
-                  className="w-full text-left py-3.5 text-white/80 hover:text-white text-sm border-b border-white/8 transition-colors">
-                  {link.label}
-                </button>
-                {link.children && (
-                  <div className="pl-5 bg-white/3">
-                    {link.children.map((c) => (
-                      <button key={c.page} onClick={() => { navigate(c.page); setMobileOpen(false); }}
-                        className="w-full text-left py-2.5 text-white/50 hover:text-white/80 text-sm border-b border-white/5">
-                        {c.label}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
+              <button key={link.page} onClick={() => { navigate(link.page); setMobileOpen(false); }}
+                className="w-full text-left py-3.5 text-white/80 hover:text-white text-sm border-b border-white/8 transition-colors">
+                {link.label}
+              </button>
             ))}
             <button
               type="button"
@@ -862,9 +1524,9 @@ function Footer({ navigate }: { navigate: (p: Page) => void }) {
         <div className="border-t border-white/10 pt-8 flex flex-col sm:flex-row justify-between gap-4 text-xs text-white/35">
           <p>© 2026 SIÃO SPORTS. All rights reserved.</p>
           <div className="flex gap-6">
-            <a href="#" className="hover:text-white/60 transition-colors">Privacy Policy</a>
-            <a href="#" className="hover:text-white/60 transition-colors">Terms of Use</a>
-            <a href="#" className="hover:text-white/60 transition-colors">Cookie Policy</a>
+            <button onClick={() => navigate("privacy")} className="hover:text-white/60 transition-colors">Privacy Policy</button>
+            <button onClick={() => navigate("terms")} className="hover:text-white/60 transition-colors">Terms of Use</button>
+            <button onClick={() => navigate("cookies")} className="hover:text-white/60 transition-colors">Cookie Policy</button>
           </div>
         </div>
       </div>
@@ -915,8 +1577,8 @@ function HomePage({ navigate }: { navigate: (p: Page) => void }) {
         </div>
         <div className="absolute bottom-8 right-10 hidden lg:flex flex-col items-center gap-2">
           <div className="w-px h-16 bg-white/20" />
-          <p className="text-white/30 text-[10px] tracking-[0.3em] rotate-90 origin-center mt-4"
-            style={{ fontFamily: "'DM Mono', monospace" }}>SCROLL</p>
+          <p className="text-white/30 text-[10px] tracking-[0.3em] mt-4"
+            style={{ fontFamily: "'DM Mono', monospace", writingMode: "vertical-rl" }}>SCROLL</p>
         </div>
       </section>
 
@@ -1070,9 +1732,9 @@ function AboutPage({ navigate }: { navigate: (p: Page) => void }) {
           </div>
           <div className="relative">
             <img
-              src={ceoPhoto}
-              alt="SIÃO SPORTS CEO"
-              className="w-full h-[960px] object-cover"
+              src={aboutGraphic}
+              alt="SIÃO SPORTS consulting graphic"
+              className="w-full h-auto max-h-[960px] object-contain bg-[#E8E2D8]"
             />
             <div className="absolute -bottom-6 -right-6 bg-[#B8872A] p-6 hidden lg:block">
               <p style={serif} className="text-white text-3xl font-bold">2025</p>
@@ -1866,13 +2528,60 @@ function ConsultationPage() {
   );
 }
 
+// ─── LEGAL PAGES ───────────────────────────────────────────────────────────────
+
+function LegalPage({ page, language }: { page: LegalPageKey; language: Lang }) {
+  const content = language === "pt" ? LEGAL_PAGES_PT[page] : LEGAL_PAGES[page];
+
+  return (
+    <div data-no-translate>
+      <section className="pt-36 pb-20 bg-[#0C1527]">
+        <div className="max-w-7xl mx-auto px-6 lg:px-10">
+          <SectionLabel>{content.label}</SectionLabel>
+          <h1 style={serif} className="text-5xl lg:text-6xl font-bold text-white max-w-3xl leading-tight">
+            {content.title}
+          </h1>
+          <p className="text-white/55 mt-5 text-sm">{content.updated}</p>
+        </div>
+      </section>
+
+      <section className="py-20 lg:py-24 bg-[#F4EFE6]">
+        <div className="max-w-4xl mx-auto px-6 lg:px-10">
+          <p className="text-[#0C1527] text-lg leading-relaxed mb-12">
+            {content.intro}
+          </p>
+          <div className="space-y-10">
+            {content.sections.map((section) => (
+              <section key={section.heading} className="border-t border-[#0C1527]/12 pt-8">
+                <h2 style={serif} className="text-2xl font-bold text-[#0C1527] mb-4">{section.heading}</h2>
+                <div className="space-y-4">
+                  {section.paragraphs.map((paragraph) => (
+                    <p key={paragraph} className="text-[#6B6050] leading-relaxed">{paragraph}</p>
+                  ))}
+                </div>
+              </section>
+            ))}
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
+
 // ─── APP ────────────────────────────────────────────────────────────────────────
 
 export default function App() {
-  const [page, setPage] = useState<Page>("home");
+  const [page, setPage] = useState<Page>(() => getPageFromLocation());
   const [language, setLanguage] = useState<Lang>("en");
 
-  const navigate = (p: Page) => setPage(p);
+  const navigate = (p: Page) => {
+    setPage(p);
+    if (typeof window === "undefined") return;
+    const path = PAGE_PATHS[p];
+    if (normalizePath(window.location.pathname) !== path) {
+      window.history.pushState({ page: p }, "", path);
+    }
+  };
   const toggleLanguage = () => setLanguage((current) => current === "en" ? "pt" : "en");
 
   useSiteAnimations(page);
@@ -1882,7 +2591,16 @@ export default function App() {
   }, [page]);
 
   useEffect(() => {
-    document.documentElement.lang = language === "pt" ? "pt" : "en";
+    const handlePopState = () => setPage(getPageFromLocation());
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, []);
+
+  useEffect(() => {
+    updateSeo(page, language);
+  }, [page, language]);
+
+  useEffect(() => {
     translatePage(language);
 
     const root = document.getElementById("root");
@@ -1909,6 +2627,9 @@ export default function App() {
     team: <TeamPage navigate={navigate} />,
     partners: <PartnersPage navigate={navigate} />,
     consultation: <ConsultationPage />,
+    privacy: <LegalPage page="privacy" language={language} />,
+    terms: <LegalPage page="terms" language={language} />,
+    cookies: <LegalPage page="cookies" language={language} />,
   };
 
   return (
