@@ -6,7 +6,7 @@ import {
   Linkedin, Instagram, Facebook, Trophy, Zap, Building2,
   Clock, Send, UserCheck, Briefcase
 } from "lucide-react";
-import siaoLogo from "../assets/sportlogo-header.jpeg";
+import siaoLogo from "../assets/newlogo.png";
 import ceoPhoto from "../assets/ceo.jpeg";
 import aboutGraphic from "../assets/new.jpeg";
 
