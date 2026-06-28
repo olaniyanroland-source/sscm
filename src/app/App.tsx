@@ -1344,12 +1344,12 @@ function StatCard({ value, label, light = false }: { value: string; label: strin
 
 function Logo({ className = "" }: { className?: string }) {
   return (
-    <span className={`block overflow-hidden ${className}`}>
+    <span className={`relative block aspect-[3.6/1] overflow-hidden ${className}`}>
       <img
         src={siaoLogo}
         alt="SIÃO SPORTS"
         data-no-translate
-        className="block h-auto w-full scale-[1.015] object-contain mix-blend-lighten"
+        className="absolute left-1/2 top-1/2 block h-auto w-[122%] max-w-none -translate-x-1/2 -translate-y-1/2 object-contain mix-blend-lighten"
       />
     </span>
   );
