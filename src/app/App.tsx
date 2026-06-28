@@ -8,7 +8,7 @@ import {
 } from "lucide-react";
 import siaoLogo from "../assets/sportlogo-header.jpeg";
 import ceoPhoto from "../assets/ceo.jpeg";
-import aboutGraphic from "../assets/graphic.jpeg";
+import aboutGraphic from "../assets/new.jpeg";
 
 type Page =
   | "home" | "about" | "services" | "sports"
@@ -1344,12 +1344,14 @@ function StatCard({ value, label, light = false }: { value: string; label: strin
 
 function Logo({ className = "" }: { className?: string }) {
   return (
-    <img
-      src={siaoLogo}
-      alt="SIÃO SPORTS"
-      data-no-translate
-      className={`block h-auto object-contain ${className}`}
-    />
+    <span className={`block overflow-hidden ${className}`}>
+      <img
+        src={siaoLogo}
+        alt="SIÃO SPORTS"
+        data-no-translate
+        className="block h-auto w-full scale-[1.015] object-contain mix-blend-lighten"
+      />
+    </span>
   );
 }
 
@@ -1367,7 +1369,7 @@ function Nav({ current, language, navigate, onToggleLanguage }: {
     <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0C1527]/95 backdrop-blur-md border-b border-white/8">
       <div className="max-w-7xl mx-auto px-6 lg:px-10 flex items-center justify-between h-16 lg:h-20">
         <button onClick={() => { navigate("home"); setMobileOpen(false); }} className="shrink-0 lg:mr-10">
-          <Logo className="w-[185px] sm:w-[220px] lg:w-[205px] xl:w-[238px]" />
+          <Logo className="w-[165px] sm:w-[220px] lg:w-[205px] xl:w-[238px]" />
         </button>
 
         {/* Desktop links */}
@@ -1397,9 +1399,21 @@ function Nav({ current, language, navigate, onToggleLanguage }: {
           </button>
         </div>
 
-        <button className="lg:hidden text-white p-1" onClick={() => setMobileOpen(!mobileOpen)}>
-          {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-        </button>
+        <div className="lg:hidden flex items-center gap-2">
+          <button
+            type="button"
+            onClick={onToggleLanguage}
+            data-no-translate
+            aria-label={language === "en" ? "Switch to Portuguese" : "Switch to English"}
+            className="border border-white/20 text-white/80 hover:text-white hover:border-[#B8872A] text-xs font-medium px-2.5 py-2 transition-colors flex items-center gap-1.5"
+          >
+            <Globe className="w-3.5 h-3.5 text-[#B8872A]" />
+            {language === "en" ? "PT" : "EN"}
+          </button>
+          <button className="text-white p-1" onClick={() => setMobileOpen(!mobileOpen)}>
+            {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
+        </div>
       </div>
 
       {mobileOpen && (
@@ -1411,18 +1425,6 @@ function Nav({ current, language, navigate, onToggleLanguage }: {
                 {link.label}
               </button>
             ))}
-            <button
-              type="button"
-              onClick={onToggleLanguage}
-              data-no-translate
-              className="w-full flex items-center justify-between py-3.5 text-white/80 hover:text-white text-sm border-b border-white/8"
-            >
-              <span className="flex items-center gap-2">
-                <Globe className="w-4 h-4 text-[#B8872A]" />
-                {language === "en" ? "Language" : "Idioma"}
-              </span>
-              <span>{language === "en" ? "Português" : "English"}</span>
-            </button>
             <button onClick={() => { navigate("consultation"); setMobileOpen(false); }}
               className="mt-5 w-full bg-[#B8872A] text-white py-3.5 text-sm font-medium hover:bg-[#9E7324] transition-colors">
               Request Consultation
@@ -1469,7 +1471,7 @@ function Footer({ navigate }: { navigate: (p: Page) => void }) {
               style={{ fontFamily: "'DM Mono', monospace" }}>Services</p>
             <ul className="space-y-3 text-sm">
               {[
-                ["Sports Consulting", "sports"],
+                ["Our Services", "sports"],
                 ["Request Consultation", "consultation"],
               ].map(([l, p]) => (
                 <li key={p}>
@@ -1830,18 +1832,15 @@ function ServicesPage({ navigate }: { navigate: (p: Page) => void }) {
         <div className="max-w-7xl mx-auto px-6 lg:px-10">
           {[
             {
-              number: "01",
-              title: "Sports Consulting",
+              title: "Our services",
               page: "sports" as Page,
               img: "photo-1574629810360-7efbbe195018",
               desc: "We work with professional clubs, sports federations, elite athletes, and event organizers to build the commercial, strategic, and operational infrastructure that winning requires.",
               services: ["Sports Management & Strategic Consulting", "Talent Identification & Athlete Development", "Sports Events & Legal Advisory Services", "Branding, Media & Communication Services", "Performance Development & Athlete Welfare", "Career Management, Intermediation & Scouting"],
             },
-          ].map(({ number, title, page, img, desc, services }) => (
+          ].map(({ title, page, img, desc, services }) => (
             <div key={title} className="grid lg:grid-cols-2 gap-16 items-center mb-24 last:mb-0 pb-24 last:pb-0 border-b border-[#0C1527]/10 last:border-0">
               <div>
-                <p className="text-[#B8872A]/40 text-8xl font-bold mb-4"
-                  style={serif}>{number}</p>
                 <h2 style={serif} className="text-3xl lg:text-4xl font-bold text-[#0C1527] mb-5">{title}</h2>
                 <p className="text-[#6B6050] leading-relaxed mb-7">{desc}</p>
                 <ul className="grid grid-cols-2 gap-x-6 gap-y-3 mb-8">
@@ -1853,7 +1852,7 @@ function ServicesPage({ navigate }: { navigate: (p: Page) => void }) {
                   ))}
                 </ul>
                 <Btn onClick={() => navigate(page)} variant="dark">
-                  Explore {title} <ArrowRight className="w-4 h-4" />
+                  Explore our services <ArrowRight className="w-4 h-4" />
                 </Btn>
               </div>
               <div className="relative">
@@ -1896,7 +1895,7 @@ function SportsPage({ navigate }: { navigate: (p: Page) => void }) {
 
       <section className="py-24 bg-[#F4EFE6]">
         <div className="max-w-7xl mx-auto px-6 lg:px-10">
-          <div className="grid lg:grid-cols-3 gap-8 mb-20">
+          <div className="grid lg:grid-cols-3 gap-8">
             {[
               { icon: Trophy, title: "Sports Management & Strategic Consulting", desc: "Our expertise includes sports management consulting, strategic planning, project development, and the implementation of effective management processes. We work closely with stakeholders to develop and execute innovative sports development programs that deliver measurable impact and long-term success." },
               { icon: UserCheck, title: "Talent Identification & Athlete Development", desc: "We are committed to discovering and developing the next generation of sporting talent through professional scouting programs, talent identification initiatives, and athlete development projects. Our mission is to bridge the gap between talent and opportunity while promoting excellence, professionalism, and integrity within the sports industry." },
@@ -1913,33 +1912,6 @@ function SportsPage({ navigate }: { navigate: (p: Page) => void }) {
                 <p className="text-[#6B6050] text-sm leading-relaxed">{desc}</p>
               </div>
             ))}
-          </div>
-
-          <div className="bg-[#0C1527] p-10 lg:p-14 grid lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <SectionLabel>Sports Practice by the numbers</SectionLabel>
-              <div className="grid grid-cols-2 gap-8 mt-4">
-                {[
-                  ["40+", "Elite athletes managed"],
-                  ["12", "Sports franchise clients"],
-                  ["3", "Professional teams advised"],
-                  ["£100M+", "Sports revenue advised"],
-                ].map(([v, l]) => (
-                  <div key={l}>
-                    <p style={serif} className="text-4xl font-bold text-[#B8872A] mb-1">{v}</p>
-                    <p className="text-white/55 text-sm">{l}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div>
-              <p className="text-white/70 text-lg leading-relaxed mb-6">
-                Our sports practice is led by Adetula Olabode—an advisor who brings lived experience in elite sport and the analytical sophistication that separates strategy from guesswork.
-              </p>
-              <Btn onClick={() => navigate("consultation")}>
-                Discuss Your Sports Challenge <ArrowRight className="w-4 h-4" />
-              </Btn>
-            </div>
           </div>
         </div>
       </section>
